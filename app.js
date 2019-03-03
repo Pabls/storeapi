@@ -1,8 +1,12 @@
 // packages
 const express = require('express');
+const mongoose = require('mongoose');
 const requestBodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
+
+// cofig
+const keys = require('./config/keys');
 
 // routes
 const analyticsRoutes = require('./routes/analytics');
@@ -12,6 +16,13 @@ const orderRoutes = require('./routes/order');
 const positionRoutes = require('./routes/position');
 
 const app = express();
+mongoose.connect(keys.mongoUri, { useNewUrlParser: true })
+    .then(() => {
+        console.log('MDB connected');
+    })
+    .catch(error => {
+        console.log('MDB error: ' + error)
+    });
 
 app.use(requestBodyParser.urlencoded({ extended: true }));
 app.use(requestBodyParser.json());
